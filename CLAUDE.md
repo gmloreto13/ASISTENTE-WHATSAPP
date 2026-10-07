@@ -30,12 +30,29 @@ la envía por WhatsApp Cloud API.
 ## Etapas
 0. Cuentas (GitHub, Vercel, Supabase, Meta, Anthropic)
 1. Proyecto base ✅
-2. Webhook de WhatsApp con bot eco ✅ (falta desplegar y probar)
+2. Webhook de WhatsApp con bot eco ✅ (desplegado; falta conectar Meta y probar)
 3. IA con la información del negocio (tablas negocios, conversaciones, mensajes)
 4. Panel para el dueño (login, editar info, "Tomar control" / "Devolver a la IA")
 5. Pedidos, citas y avisos al dueño (tool use)
 6. Varios negocios y cobro con Stripe
 7. Revisión de seguridad y aviso de privacidad
+
+## Dónde vive el proyecto
+- GitHub: https://github.com/gmloreto13/ASISTENTE-WHATSAPP
+- Vercel: https://asistente-whatsapp-two.vercel.app
+- Webhook para Meta: https://asistente-whatsapp-two.vercel.app/api/webhook
+
+## Avance (6 de octubre de 2026)
+Hecho: código subido a GitHub y desplegado en Vercel; el webhook responde
+(403 sin token, 401 sin firma).
+
+Pendiente para terminar la etapa 2:
+1. Sacar los 4 datos de Meta (`WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET`,
+   `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`).
+2. Pegarlos en Vercel (Settings → Environment Variables) y hacer Redeploy.
+3. Configurar el webhook en Meta (Callback URL + verify token) y suscribirse
+   al campo `messages`.
+4. Mandar "hola" al número de prueba y confirmar que el bot eco contesta.
 
 ## Archivos importantes
 - `src/app/api/webhook/route.ts`: recibe los mensajes de WhatsApp
