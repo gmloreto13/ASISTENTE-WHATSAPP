@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# La plantilla de variables SÍ se sube a git (no tiene claves reales)
+!.env.example
