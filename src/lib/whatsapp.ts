@@ -21,6 +21,15 @@ export function firmaEsValida(cuerpo: string, firma: string | null): boolean {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
+// WhatsApp entrega los números de México como "521" + 10 dígitos (con un 1
+// extra), pero para enviar Meta espera "52" + 10 dígitos. Aquí quitamos ese 1.
+export function normalizarNumero(numero: string): string {
+  if (numero.startsWith("521") && numero.length === 13) {
+    return "52" + numero.slice(3);
+  }
+  return numero;
+}
+
 // Envía un mensaje de texto a un número de WhatsApp.
 export async function enviarTexto(para: string, texto: string): Promise<void> {
   const token = process.env.WHATSAPP_TOKEN;
@@ -39,7 +48,7 @@ export async function enviarTexto(para: string, texto: string): Promise<void> {
       },
       body: JSON.stringify({
         messaging_product: "whatsapp",
-        to: para,
+        to: normalizarNumero(para),
         type: "text",
         text: { body: texto },
       }),
