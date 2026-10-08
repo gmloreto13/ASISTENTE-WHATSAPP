@@ -42,17 +42,31 @@ la envía por WhatsApp Cloud API.
 - Vercel: https://asistente-whatsapp-two.vercel.app
 - Webhook para Meta: https://asistente-whatsapp-two.vercel.app/api/webhook
 
-## Avance (6 de octubre de 2026)
-Hecho: código subido a GitHub y desplegado en Vercel; el webhook responde
-(403 sin token, 401 sin firma).
+## Avance (7 de octubre de 2026)
+Hecho:
+- App creada en Meta (developers.facebook.com) con WhatsApp activado.
+- Las 4 variables guardadas en Vercel y Redeploy hecho.
+- Webhook verificado en Meta y suscrito al campo `messages`.
+- Los mensajes sí llegan a la app (POST 200, firma válida).
+- `src/lib/whatsapp.ts` quita el 1 extra de los números de México (521 → 52)
+  antes de enviar.
+
+Dónde nos quedamos (etapa 2 sin terminar): el bot eco no contesta. Meta
+rechaza el envío con el error 131030 ("Recipient phone number not in allowed
+list"). El número personal ya se agregó en Configuración de la API → Para,
+pero el "Hello World" de prueba tampoco llega. El Administrador de WhatsApp
+muestra "Cuenta restringida: tendrás que verificar tu negocio".
 
 Pendiente para terminar la etapa 2:
-1. Sacar los 4 datos de Meta (`WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET`,
-   `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`).
-2. Pegarlos en Vercel (Settings → Environment Variables) y hacer Redeploy.
-3. Configurar el webhook en Meta (Callback URL + verify token) y suscribirse
-   al campo `messages`.
-4. Mandar "hola" al número de prueba y confirmar que el bot eco contesta.
+1. Averiguar si la cuenta restringida es lo que bloquea los envíos: revisar
+   qué mensaje exacto sale al dar "Enviar mensaje" en Configuración de la API
+   y el registro más reciente en Vercel → Logs.
+2. Si es eso, hacer la verificación del negocio en Meta.
+3. Generar un `WHATSAPP_TOKEN` nuevo (el temporal dura 24 horas), pegarlo en
+   Vercel y hacer Redeploy.
+4. Cambiar la frase de `WHATSAPP_VERIFY_TOKEN` en Vercel y en Meta (la actual
+   se pegó en el chat).
+5. Mandar "hola" al número de prueba y confirmar que el bot eco contesta.
 
 ## Archivos importantes
 - `src/app/api/webhook/route.ts`: recibe los mensajes de WhatsApp
